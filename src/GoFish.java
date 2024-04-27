@@ -19,18 +19,13 @@ import javafx.stage.Stage;
  * D10 - Simulation of a "Go Fish" game
  */
 public class GoFish extends Application {
-    /* private Pool pool;
-    private 
-
-    static class Pool {
-        private Card[] deck;
-
-    } */
-
+    
     private static Stage stage = new Stage();
     private static Player player = new Player();
     private static Player cpu = new Player();
     private static Pool cardPool = new Pool();
+    
+
 
     @Override
     public void start(Stage stage) {
