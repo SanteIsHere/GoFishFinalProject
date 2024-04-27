@@ -24,15 +24,15 @@ concepts together.
 - [ ] D1 - The project shall demonstrate Polymorphic references using interfaces in their most logical and appropriate uses
 - [ ] D2 - The project shall demonstrate Polymorphic references using subclassing in their most logical and appropriate uses
 - [x] D3 - The project shall demonstrate the use of at least one abstract class
-- [ ] D4 - The project shall demonstrate the use of subclassing where a method (non-`{java}abstract`) is overridden requiring use the `{java}super` keyword
+- [ ] D4 - The project shall demonstrate the use of sub-classing where a method (non-`{java}abstract`) is overridden requiring use the `{java}super` keyword
 - [ ] D5 - The project shall demonstrate the use of a callback using an functional interface and a Lambda expression
 - [x] D6 - The project shall demonstrate the use of a callback using an instance of an anonymous class
-- [ ] D7 - The project shall demonstrate the use of an Inner Class
+- [x] D7 - The project shall demonstrate the use of an Inner Class
   - This is a help to be able to make your GUI have easily shared data with objects...
-- [ ] D8 - The project shall demonstrate proper use of a Aggregation/Composition relationship
+- [x] D8 - The project shall demonstrate proper use of a Aggregation/Composition relationship
 - [x] D9 - The project shall demonstrate proper use of a dependency relationship
 - [x] D10 - The project shall be a simulation using a model of real-world thing or concept: game, store, bank/atm, business tool, communication app
-- [ ] D11 - The project shall include a new Exception class related to the project
+- [x] D11 - The project shall include a new Exception class related to the project
 - [ ] D12 - The project shall throw this new Exception at the appropriate time
 - [ ] D13 - The project shall handle this new Exception
 

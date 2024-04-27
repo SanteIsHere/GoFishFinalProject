@@ -24,7 +24,7 @@ public class GoFishCard extends Card implements Comparable<GoFishCard> {
             )
         );
 
-        System.out.println(this);
+        // System.out.println(this);
     }
 
     @Override
