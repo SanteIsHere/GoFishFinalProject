@@ -23,9 +23,15 @@ public class GoFishCard extends Card implements Comparable<GoFishCard> {
             String.format("resources/%s/tile%03d.png", suit, rank-1)
             )
         );
+
+        System.out.println(this);
     }
 
     @Override
+    /**
+     * Implement `compareTo` to allow
+     * for comparisons between cards
+     */
     public int compareTo(GoFishCard otherCard) {
         return (this.rank - otherCard.rank);
     }
@@ -48,7 +54,7 @@ public class GoFishCard extends Card implements Comparable<GoFishCard> {
 
     @Override
     public String toString() {
-        return super.toString() + String.format(": %d of %s", 
+        return super.toString() + String.format(": %s of %s", 
         getSymbolicRank(), suit);
     }
 }

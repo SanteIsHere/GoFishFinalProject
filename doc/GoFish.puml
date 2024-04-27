@@ -37,7 +37,7 @@ class GoFishCard {
     - suit: String
 }
 
-class PoolExhaustedException extends RuntimeException {
+class PoolExhaustedException {
 
 }
 
@@ -45,10 +45,11 @@ interface Drawable {
     
 }
 
-Player --> Pool: 'uses'
-Pool o--> Card: 'part of'
+Player --> Pool: uses
+Pool o-up-> Card: part of
 GoFishCard -up-|> Card: extends
-GoFishGame *--> Pool: 'has a'
-
+GoFishGame *--> Pool: has a
+Pool -up-> Drawable: implements
+PoolExhaustedException -up-> RuntimeException: extends
 
 @enduml

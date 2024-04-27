@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
  * Class representing the deck/pool of available cards
  * @field deck Deck of cards available to draw from (initially)
  */
-public class Pool extends HBox {
+public class Pool extends HBox implements Drawable {
     public ArrayList<Card> deck = new ArrayList<Card>(52);
     private ImageView img = new ImageView();
     private Text count = new Text("52");
@@ -19,7 +19,6 @@ public class Pool extends HBox {
         for (int count = 0; count < 52; count++) {
             deck.add(new GoFishCard());
         }
-            
 
         img.setImage(new Image("resources/Deck/DeckFull.png"));
 
@@ -28,12 +27,13 @@ public class Pool extends HBox {
 
     public void dealCards(Player player, Player cpu) {
         for (int count = 0; count < 7; count++) {
-            player.getHand().add(drawCard());
-            cpu.getHand().add(drawCard());
+            player.getHand().add(draw());
+            cpu.getHand().add(draw());
         }
     }
 
-    public Card drawCard() {
+    @Override
+    public Card draw() {
         int deckSize = Integer.parseInt(count.getText());
         count.setText(String.format("%d", deckSize - 1));
         return deck.remove((int)(Math.random()*deck.size()));

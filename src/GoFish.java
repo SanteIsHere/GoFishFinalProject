@@ -24,7 +24,7 @@ public class GoFish extends Application {
     private static Player player = new Player();
     private static Player cpu = new Player();
     private static Pool cardPool = new Pool();
-    
+
 
 
     @Override
@@ -104,7 +104,7 @@ public class GoFish extends Application {
         cardPool.dealCards(player, cpu);
         player.updateHand();
         cpu.updateHand();
-        cardPool.drawCard();
+        cardPool.draw();
     }
 
 
