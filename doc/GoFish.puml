@@ -1,0 +1,52 @@
+@startuml
+
+' note top of Game
+'     "Go Fish simulation for two players"
+' end note
+
+class Player {
+    - cards: ArrayList<Card> // Re-sizable array of cards
+    - books: int // No. of groups of four cards of the same rank
+    - score: int // Player's score - determined by the no. of books they have
+}
+
+class GoFishGame {
+    - {static} currentPlayer: Player // Select randomly
+    - {static} player: Player
+    - {static} cpu: Player
+    - {static} cardPool: Pool
+}
+
+class Pool {
+    - deck: Card[]
+}
+
+' note right of Pool
+'     "Represents the deck of available cards"
+' end note
+
+abstract class Card {
+    - {static} validSuits: String[] = {"Clubs", "Diamonds", 
+    "Hearts", "Spades"}
+}
+
+class GoFishCard {
+    - rank: int
+    - suit: String
+}
+
+class PoolExhaustedException extends RuntimeException {
+
+}
+
+interface Drawable {
+    
+}
+
+Player --> Pool: 'uses'
+Pool o--> Card: 'part of'
+GoFishCard -up-|> Card: extends
+GoFishGame *--> Pool: 'has a'
+
+
+@enduml
