@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Map;
 import static java.util.Map.entry;
 
@@ -28,6 +27,4 @@ abstract class Card extends ImageView {
     public String toString() {
         return "Go Fish Card";
     }
-
-
 }

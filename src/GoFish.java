@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -31,42 +30,6 @@ public class GoFish extends Application {
      * class as a `Pool` 
      */
     private static Pool cardPool = new Pool();
-
-
-    /**
-     * D6 - Class representing the deck/pool of available cards
-     * @field deck Deck of cards available to draw from (initially)
-     */
-    private static class Pool extends HBox implements Drawable {
-        public ArrayList<Card> deck = new ArrayList<Card>(52);
-        private ImageView img = new ImageView();
-        private Text count = new Text("52");
-
-
-        public Pool() {
-            for (int count = 0; count < 52; count++) {
-                deck.add(new GoFishCard());
-            }
-
-            img.setImage(new Image("resources/Deck/DeckFull.png"));
-
-            getChildren().addAll(img, count);
-        }
-
-        public void dealCards(Player player, Player cpu) {
-            for (int count = 0; count < 7; count++) {
-                player.getHand().add(draw());
-                cpu.getHand().add(draw());
-            }
-        }
-
-        @Override
-        public Card draw() {
-            int deckSize = Integer.parseInt(count.getText());
-            count.setText(String.format("%d", deckSize - 1));
-            return deck.remove((int)(Math.random()*deck.size()));
-        }
-    }
 
     @Override
     public void start(Stage stage) {
@@ -116,6 +79,8 @@ public class GoFish extends Application {
         // Give the game board a green background color
         gameSpace.setStyle("-fx-background-color: green;");
 
+
+
         HBox interactableSpace = new HBox(cardPool, new Button("Ask for rank"));
 
         gameSpace.setTop(cpu);
@@ -126,6 +91,7 @@ public class GoFish extends Application {
         BorderPane.setMargin(player, new Insets(0, 0, 20, 0));
         
         Pane root = new Pane(gameSpace);
+
 
         initializeGame();
 
@@ -143,9 +109,7 @@ public class GoFish extends Application {
      */
     private static void initializeGame() {
         cardPool.dealCards(player, cpu);
-        player.updateHand();
-        cpu.updateHand();
-        cardPool.draw();
+        cardPool.draw(-1);
     }
 
 

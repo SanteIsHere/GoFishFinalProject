@@ -52,6 +52,10 @@ public class GoFishCard extends Card implements Comparable<GoFishCard> {
             return Integer.toString(this.rank);
     }
 
+    public int getRank() {
+        return rank;
+    }
+
     @Override
     public String toString() {
         return super.toString() + String.format(": %s of %s", 

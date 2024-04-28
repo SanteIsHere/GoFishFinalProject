@@ -13,7 +13,7 @@ concepts together.
 - The process of developing the final project including producing design documentation and code shall be the result of the student.
   - Help may be provided by me and may include examples provided as CYUs, Lab starting points, or class examples
   - **However, work must be added or changed to these starting points to count as meeting the requirements**
-- [ ] UML class diagrams representing the coded implementation shall be submitted.
+- [x] UML class diagrams representing the coded implementation shall be submitted.
 - [ ] Code shall be submitted with comments referencing the requirements below as "D1" or "F1", etc....
 - [ ] For **each** requirement met in the code, the rationale shall be described in the comments.
   - "D1 - I chose to use a polymorphic reference using an interface here because...."
@@ -33,8 +33,8 @@ concepts together.
 - [x] D9 - The project shall demonstrate proper use of a dependency relationship
 - [x] D10 - The project shall be a simulation using a model of real-world thing or concept: game, store, bank/atm, business tool, communication app
 - [x] D11 - The project shall include a new Exception class related to the project
-- [ ] D12 - The project shall throw this new Exception at the appropriate time
-- [ ] D13 - The project shall handle this new Exception
+- [x] D12 - The project shall throw this new Exception at the appropriate time
+- [x] D13 - The project shall handle this new Exception
 
 ## Functional Requirements
 
