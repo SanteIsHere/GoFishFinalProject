@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit;
+
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -23,22 +25,46 @@ public class HumanPlayer extends Player {
         
         requestBttn.setOnAction((ActionEvent ev)
         -> {
-            System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
-            requestCards(Integer.valueOf(rankInput.getText()), opponent);
+            if (!takenTurn) {
+                System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
+                requestCards(Integer.valueOf(rankInput.getText()), opponent);
+                takenTurn = true;
+                try {
+                    controls.setVisible(false);
+                    rankInput.clear();
+                    TimeUnit.SECONDS.sleep(1);
+                    opponent.takeTurn(this);
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                takeTurn();
+            }
+            
         });
         controls.getChildren().addAll(requestBttn, rankInput);
-        // getChildren().add(controls);
     }
 
+    public void takeTurn() {
+        controls.setVisible(true);
+        takenTurn = false;
+    }
+
+    /**
+     * Change cards to be visible (for a Human Player)
+     */
     @Override
     public void updateHand() {
         super.updateHand();
         getChildren().add(0, controls);
         for (Node node: getChildren())
-            if (node instanceof Card)
-                ((Card)node).setImage(new Image(
+            if (node instanceof Card) {
+                Card card = (Card)node;
+                card.setImage(new Image(
                     String.format("resources/%s/tile%03d.png", 
-                    ((Card)node).getSuit(), ((Card)node).getRank()-1)
+                    card.getSuit(), card.getRank()-1)
                     ));
+            }
+                
     }
 }

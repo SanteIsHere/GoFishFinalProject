@@ -1,15 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 abstract class Player extends HBox {
     protected List<Card> hand = 
@@ -18,6 +10,7 @@ abstract class Player extends HBox {
     protected static Pool pool;
     private HashMap<Integer, Integer> rankCount = 
     new HashMap<Integer, Integer>();
+    public boolean takenTurn = false;
 
     /**
      * Updates the contents of the player's hand (visually - adds the card objects to 
@@ -80,12 +73,14 @@ abstract class Player extends HBox {
                 hand.add(otherPlayer.drawCards(rank));
             updateHand();
         } else {
-            System.out.println("Player has no cards of rank: " + rank + "... GoFish!");
+            System.out.printf("Player (%s) has no cards of rank: %d... GoFish!\n",
+             otherPlayer, rank);
             goFish(pool);
         }
 
         updateBooks();
     }
+
 
     /**
      * "Fish" a card from the pool
@@ -129,5 +124,10 @@ abstract class Player extends HBox {
                 hand.removeIf((card) -> (card.getRank() == rank));
             }
                 
+    }
+
+    @Override
+    public String toString() {
+        return "Human Player";
     }
 }

@@ -1,12 +1,8 @@
-import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -24,12 +20,13 @@ import javafx.stage.Stage;
 public class GoFish extends Application {
     
     private static Stage stage = new Stage();
-    private static Player cpu = new CPUPlayer();
+    private static CPUPlayer cpu = new CPUPlayer();
     /* D6 - The `GoFish` class composes the `Pool`
      * class as a `Pool` 
      */
     private static Pool cardPool = new Pool();
-    private static Player player = new HumanPlayer(cardPool, (CPUPlayer)cpu);
+    private static HumanPlayer player = new HumanPlayer(cardPool,
+     cpu);
 
     @Override
     public void start(Stage stage) {
@@ -59,9 +56,7 @@ public class GoFish extends Application {
         startGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
-                stage.setScene(startGameScene());
-                stage.show();
-                System.out.println(stage.getScene());
+                GameManager.initializeGame();
             }
         });
         VBox root = new VBox(title, startGame);
@@ -92,25 +87,33 @@ public class GoFish extends Application {
         
         Pane root = new Pane(gameSpace);
 
-
-        initializeGame();
-
         return new Scene(root);
 
     }
 
     // Inner Class managing game state
-    static class Game {
-        
+    private static class GameManager {
+        static boolean gameOver = false;
+
+
+        private static void initializeGame() {
+            cardPool.dealCards(player, cpu);
+            // System.out.println(cpu.getHand());
+            stage.setScene(startGameScene());
+            stage.show();
+
+
+            if (!cpu.takenTurn) {
+                cpu.takeTurn(player);
+                player.takeTurn();
+            }
+            
+            
+                
+        }
     }
 
-    /**
-     * Builds
-     */
-    private static void initializeGame() {
-        cardPool.dealCards(player, cpu);
-        System.out.println(cpu.getHand());
-    }
+    
 
 
     public static void main(String[] args) {
