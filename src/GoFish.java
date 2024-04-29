@@ -24,12 +24,12 @@ import javafx.stage.Stage;
 public class GoFish extends Application {
     
     private static Stage stage = new Stage();
-    private static Player player = new Player();
-    private static Player cpu = new Player();
+    private static Player cpu = new CPUPlayer();
     /* D6 - The `GoFish` class composes the `Pool`
      * class as a `Pool` 
      */
     private static Pool cardPool = new Pool();
+    private static Player player = new HumanPlayer(cardPool, (CPUPlayer)cpu);
 
     @Override
     public void start(Stage stage) {
@@ -81,7 +81,7 @@ public class GoFish extends Application {
 
 
 
-        HBox interactableSpace = new HBox(cardPool, new Button("Ask for rank"));
+        HBox interactableSpace = new HBox(cardPool);
 
         gameSpace.setTop(cpu);
         BorderPane.setMargin(cpu, new Insets(20, 0, 0, 0));
@@ -109,7 +109,7 @@ public class GoFish extends Application {
      */
     private static void initializeGame() {
         cardPool.dealCards(player, cpu);
-        cardPool.draw(-1);
+        System.out.println(cpu.getHand());
     }
 
 

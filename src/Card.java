@@ -1,30 +1,88 @@
 import java.util.Map;
 import static java.util.Map.entry;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * D3 - Abstract Class representing a Card. Extends `ImageView` so that it 
- * can be part of a Scene Graph
- * 
- * @field rank - The value associated with the Card (1-13)
- * @field suit - The card's suit ("Clubs", "Diamonds", 
- * "Hearts", "Spades")
- */
-abstract class Card extends ImageView {
-    protected static String[] validSuits =
+* Concrete class representing a "Go Fish" card. Implements 
+the `Comparable` interface and `compareTo` method to allow comparisons
+between instances (and sorting)
+
+@field suit The suit of the card
+@field rank The card's rank (randomly generated integer 1-13) 
+*/
+public class Card extends ImageView implements Comparable<Card> {
+    private static String[] validSuits =
     {"Clubs", "Diamonds", "Hearts", "Spades"};
    
-    protected static Map<Integer, String> rankMap =
+    private static Map<Integer, String> rankMap =
     Map.ofEntries(
         entry(1, "A"),
         entry(11, "J"),
         entry(12, "Q"),
         entry(13, "K")
     );
+    private String suit;
+    private int rank = (int)(Math.random()*13)+1;
+    
+    public Card() {
+        this.suit = validSuits[(int)(Math.random()*4)];
+
+        // Debug: Print path of image to console to validate 
+        // System.out.println(String.format("resources/%s/tile%03d.png", suit, rank));
+
+        // Set the image for a (Player's) card
+        setImage(new Image(
+            String.format("resources/%s/tile%03d.png", suit, rank-1)
+            )
+        );
+    }
+
+    @Override
+    /**
+     * Implement `compareTo` to allow
+     * for comparisons between cards
+     */
+    public int compareTo(Card otherCard) {
+        return (this.rank - otherCard.rank);
+    }
+
+    /**
+     * Get the symbolic representation of this card's rank:
+     * e.g 1 -> "A"
+     * 2 .. 10 -> "2 .. 10"
+     * 11 -> "J"
+     * 12 -> "Q"
+     * 13 -> "K"
+     * @return The symbol associated with the rank
+     */
+    private String getSymbolicRank() {
+        if (this.rank < 2 || this.rank > 10)
+            return rankMap.get(this.rank);
+        else
+            return Integer.toString(this.rank);
+    }
+
+    /**
+     * Accessor for card's rank
+     * @return The card's rank
+     */
+    public int getRank() {
+        return rank;
+    }
+
+    /**
+     * Accessor for card's suit
+     * @return The card's suit
+     */
+    public String getSuit() {
+        return suit;
+    }
 
     @Override
     public String toString() {
-        return "Go Fish Card";
+        return super.toString() + String.format(": %s of %s", 
+        getSymbolicRank(), suit);
     }
 }

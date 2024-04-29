@@ -1,21 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
-class Player extends HBox implements Drawable {
-    private List<GoFishCard> hand = 
-    new ArrayList<GoFishCard>();
+abstract class Player extends HBox {
+    protected List<Card> hand = 
+    new ArrayList<Card>();
     private int books = 0;
-    private ImageView img = new ImageView();
-    
-    public Player() {
-        img.setImage(new Image("resources/playerIcon.png"));
-        getChildren().add(img);
-    }
+    protected static Pool pool;
+    private HashMap<Integer, Integer> rankCount = 
+    new HashMap<Integer, Integer>();
 
     /**
      * Updates the contents of the player's hand (visually - adds the card objects to 
@@ -28,7 +30,7 @@ class Player extends HBox implements Drawable {
         getChildren().clear();
         // Add the cards in the hand to the `ObservableList`
 
-        getChildren().setAll(hand);
+        getChildren().addAll(hand);
     }
 
     /**
@@ -36,12 +38,12 @@ class Player extends HBox implements Drawable {
      * @param rank The rank of cards to search for
      * @return Array of cards with
      */
-    public GoFishCard draw(int rank) throws PoolExhaustedException {
+    public Card drawCards(int rank) throws PoolExhaustedException {
         try {
             if (hand.isEmpty())
                 throw new PoolExhaustedException("Hand is empty"); 
             else {
-                for (GoFishCard card: hand)
+                for (Card card: hand)
                     if (card.getRank() == rank )
                         return hand.remove(hand.indexOf(card));
             }
@@ -57,26 +59,69 @@ class Player extends HBox implements Drawable {
      */
     private boolean hasRank(int rank) {
         boolean rankFound = false;
-        for (GoFishCard card: hand)
+        for (Card card: hand)
             if (card.getRank() == rank)
                 rankFound = true;
         
         return rankFound;
     }
 
+    /**
+     * Request cards of a specified rank from another player
+     * @param rank The rank of cards to request
+     * @param otherPlayer
+     */
     public void requestCards(int rank, Player otherPlayer) {
-        while (otherPlayer.hasRank(rank))
-            hand.add(otherPlayer.draw(rank));
-        
+        if (otherPlayer.hasRank(rank))
+        {
+           while (otherPlayer.hasRank(rank))
+                hand.add(otherPlayer.drawCards(rank));
+            updateHand();
+        } else {
+            System.out.println("Player has no cards of rank: " + rank + "... GoFish!");
+            goFish(pool);
+        }
+
+        updateBooks();
+    }
+
+    /**
+     * "Fish" a card from the pool
+     * @param pool Deck of cards
+     */
+    public void goFish(Pool pool) {
+        // Draw a card from the pool
+        hand.add(pool.draw());
+        // Update the hand (visually)
         updateHand();
     }
 
-    public void draw(Pool pool) {
-        //
-        hand.add(pool.draw());
+    /**
+     * Accessor for hand contents
+     * @return The hand
+     */
+    public List<Card> getHand() {
+        return hand;
     }
 
-    public List<GoFishCard> getHand() {
-        return hand;
+    
+    private void updateBooks() {
+        /* Initialize the `HashMap` mapping ranks to their total counts
+         */
+        for (Card card: hand) {
+            if (rankCount.containsKey(card.getRank()))
+                rankCount.put(card.getRank(),
+                rankCount.get(card.getRank())+1);
+            else
+                rankCount.put(card.getRank(),
+                1);
+        }
+        
+        for (int rank: rankCount.values())
+            if (rank >= 4) {
+                books++;
+                hand.removeIf((card) -> (card.getRank() == rank));
+            }
+                
     }
 }

@@ -4,10 +4,18 @@
 '     "Go Fish simulation for two players"
 ' end note
 
-class Player {
+abstract class Player {
     - cards: ArrayList<Card> // Re-sizable array of cards
     - books: int // No. of groups of four cards of the same rank
     - score: int // Player's score - determined by the no. of books they have
+}
+
+class HumanPlayer {
+
+}
+
+class CPUPlayer {
+
 }
 
 class GoFishGame {
@@ -25,29 +33,31 @@ class Pool {
 '     "Represents the deck of available cards"
 ' end note
 
-abstract class Card {
+class Card {
     - {static} validSuits: String[] = {"Clubs", "Diamonds", 
     "Hearts", "Spades"}
     - {static} rankMap: Map<Integer, String> = {1 -> "A", 11 -> "J", 
     12 -> "Q", 13 -> "K"}
-}
-
-class GoFishCard {
     - rank: int
     - suit: String
+}
+
+class Card {
 }
 
 class PoolExhaustedException {
 
 }
 
-interface Drawable {
-    
-}
+note right of PoolExhaustedException
+    Subclass of `RuntimeException` that indicates
+    that a player - or the pool - has run out of cards
+end note
 
+HumanPlayer --|> Player: extends
+CPUPlayer --|> Player: extends
 Player --> Pool: uses
 Pool o-up-> Card: part of
-GoFishCard -up-|> Card: extends
 GoFishGame *--> Pool: has a
 Pool -up-> Drawable: implements
 PoolExhaustedException -up-> RuntimeException: extends

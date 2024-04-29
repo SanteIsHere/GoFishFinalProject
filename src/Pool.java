@@ -10,14 +10,14 @@ import javafx.scene.text.Text;
  * @field deck Deck of cards available to draw from (initially)
  */
 public class Pool extends HBox {
-    private ArrayList<GoFishCard> deck = new ArrayList<GoFishCard>(52);
+    private ArrayList<Card> deck = new ArrayList<Card>(52);
     private ImageView img = new ImageView();
     private Text count = new Text(String.format("%d cards left", deck.size()));
 
 
     public Pool() {
         for (int count = 0; count < 52; count++) {
-            deck.add(new GoFishCard());
+            deck.add(new Card());
         }
 
         img.setImage(new Image("resources/Deck/DeckFull.png"));
@@ -27,18 +27,18 @@ public class Pool extends HBox {
 
     public void dealCards(Player player, Player cpu) {
         for (int count = 0; count < 7; count++) {
-            player.draw(this);
-            cpu.draw(this);
+            player.goFish(this);
+            cpu.goFish(this);
         }
     }
 
     /**
      * Draw from the top of the pool/deck
      */
-    public GoFishCard draw() throws PoolExhaustedException {
+    public Card draw() throws PoolExhaustedException {
         try {
             // Remove the top-most card from the pool
-            GoFishCard drawnCard = deck.remove(0);
+            Card drawnCard = deck.remove(0);
             // Update the count indicator (`Text` component)
             count.setText(String.format("%d cards left", deck.size())); 
             return drawnCard;
