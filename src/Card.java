@@ -48,6 +48,8 @@ public class Card extends ImageView implements Comparable<Card> {
         return (this.rank - otherCard.rank);
     }
 
+    
+
     /**
      * Get the symbolic representation of this card's rank:
      * e.g 1 -> "A"
@@ -82,7 +84,7 @@ public class Card extends ImageView implements Comparable<Card> {
 
     @Override
     public String toString() {
-        return super.toString() + String.format(": %s of %s", 
+        return String.format("Card: %s of %s", 
         getSymbolicRank(), suit);
     }
 }

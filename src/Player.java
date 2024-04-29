@@ -44,8 +44,10 @@ abstract class Player extends HBox {
                 throw new PoolExhaustedException("Hand is empty"); 
             else {
                 for (Card card: hand)
-                    if (card.getRank() == rank )
+                    if (card.getRank() == rank) {
+                        System.out.println("Got card!: " + card);
                         return hand.remove(hand.indexOf(card));
+                    }
             }
         } catch (PoolExhaustedException ex) {
             ex.printStackTrace();
@@ -109,14 +111,18 @@ abstract class Player extends HBox {
         /* Initialize the `HashMap` mapping ranks to their total counts
          */
         for (Card card: hand) {
-            if (rankCount.containsKey(card.getRank()))
-                rankCount.put(card.getRank(),
-                rankCount.get(card.getRank())+1);
+            int cardRank = card.getRank();
+            // If the rank is a key in the map, increment its value
+            if (rankCount.containsKey(cardRank))
+                rankCount.put(cardRank,
+                rankCount.get(cardRank)+1);
+            // Assign the rank as a key to the map with initial value 1
             else
-                rankCount.put(card.getRank(),
+                rankCount.put(cardRank,
                 1);
         }
         
+        // Find and remove cards of the same rank if their count is 4 or greater: Increment the count of books
         for (int rank: rankCount.values())
             if (rank >= 4) {
                 books++;
