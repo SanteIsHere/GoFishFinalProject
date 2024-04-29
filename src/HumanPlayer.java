@@ -46,6 +46,11 @@ public class HumanPlayer extends Player {
     }
 
     public void takeTurn() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
         controls.setVisible(true);
         takenTurn = false;
     }

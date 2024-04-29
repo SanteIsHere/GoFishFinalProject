@@ -38,7 +38,7 @@ abstract class Player extends HBox {
             else {
                 for (Card card: hand)
                     if (card.getRank() == rank) {
-                        System.out.println("Got card!: " + card);
+                        System.out.println("Got card! -> " + card);
                         return hand.remove(hand.indexOf(card));
                     }
             }
@@ -105,6 +105,8 @@ abstract class Player extends HBox {
     private void updateBooks() {
         /* Initialize the `HashMap` mapping ranks to their total counts
          */
+        // Clear the `HashMap` first
+        rankCount.clear();
         for (Card card: hand) {
             int cardRank = card.getRank();
             // If the rank is a key in the map, increment its value

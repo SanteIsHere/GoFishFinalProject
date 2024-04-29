@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -21,10 +22,17 @@ public class Pool extends HBox {
         }
 
         img.setImage(new Image("resources/Deck/DeckFull.png"));
+        count.setFill(Color.WHITE);
+        
 
         getChildren().addAll(img, count);
     }
 
+    /**
+     * Deal cards to players when the game begins
+     * @param player
+     * @param cpu
+     */
     public void dealCards(Player player, Player cpu) {
         for (int count = 0; count < 7; count++) {
             player.goFish(this);
