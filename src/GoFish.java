@@ -106,10 +106,7 @@ public class GoFish extends Application {
             if (!cpu.takenTurn) {
                 cpu.takeTurn(player);
                 player.takeTurn();
-            }
-            
-            
-                
+            }        
         }
     }
 

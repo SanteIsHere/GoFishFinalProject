@@ -1,11 +1,13 @@
 import java.util.concurrent.TimeUnit;
 
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class HumanPlayer extends Player {
     private VBox controls = new VBox();
@@ -29,15 +31,14 @@ public class HumanPlayer extends Player {
                 System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
                 requestCards(Integer.valueOf(rankInput.getText()), opponent);
                 takenTurn = true;
-                try {
-                    controls.setVisible(false);
-                    rankInput.clear();
-                    TimeUnit.SECONDS.sleep(1);
-                    opponent.takeTurn(this);
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
+                revealControls.setFromValue(1.0);
+                revealControls.setToValue(0.0);
+                revealControls.setOnFinished((event) -> {controls.setVisible(false);}
+                );
+                revealControls.play();
+                rankInput.clear(); // Clear the text input field
+                opponent.takeTurn(this);
                 takeTurn();
             }
             
@@ -46,12 +47,12 @@ public class HumanPlayer extends Player {
     }
 
     public void takeTurn() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        controls.setVisible(true);
+        FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
+        revealControls.setFromValue(0.0);
+        revealControls.setToValue(1.0);
+        revealControls.setOnFinished((event) -> {controls.setVisible(true);}
+        );
+        revealControls.play();
         takenTurn = false;
     }
 
