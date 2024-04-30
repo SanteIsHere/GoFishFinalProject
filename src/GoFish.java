@@ -100,13 +100,15 @@ public class GoFish extends Application {
             cardPool.dealCards(player, cpu);
             // System.out.println(cpu.getHand());
             stage.setScene(startGameScene());
+            stage.sizeToScene();
             stage.show();
 
 
-            if (!cpu.takenTurn) {
-                cpu.takeTurn(player);
+            if (!player.takenTurn) {
                 player.takeTurn();
             }        
+            else
+                cpu.takeTurn(player);
         }
     }
 

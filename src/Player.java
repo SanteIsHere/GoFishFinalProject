@@ -1,16 +1,24 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 abstract class Player extends HBox {
+    // Player's hand of cards
     protected List<Card> hand = 
     new ArrayList<Card>();
+    // The no. of books the player holds
     private int books = 0;
     protected static Pool pool;
+    // Map of each rank to their count in the player's hand
     private HashMap<Integer, Integer> rankCount = 
     new HashMap<Integer, Integer>();
     public boolean takenTurn = false;
+    // Visual indicator for book count
+    private Text booksHeld = new Text("Books held: 0");
 
     /**
      * Updates the contents of the player's hand (visually - adds the card objects to 
@@ -21,8 +29,9 @@ abstract class Player extends HBox {
         hand.sort(null);
         // Clear the children attached to the `HBox`
         getChildren().clear();
-        // Add the cards in the hand to the `ObservableList`
-
+        
+        // Add the book count indicator and cards in the hand to the `ObservableList`
+        getChildren().add(booksHeld);
         getChildren().addAll(hand);
     }
 
@@ -38,7 +47,7 @@ abstract class Player extends HBox {
             else {
                 for (Card card: hand)
                     if (card.getRank() == rank) {
-                        System.out.println("Got card! -> " + card);
+                        System.out.printf("Got card! (From '%s') -> %s\n", this, card);
                         return hand.remove(hand.indexOf(card));
                     }
             }
@@ -71,14 +80,12 @@ abstract class Player extends HBox {
         {
            while (otherPlayer.hasRank(rank))
                 hand.add(otherPlayer.drawCards(rank));
-            updateHand();
+            updateBooks();
         } else {
             System.out.printf("Player (%s) has no cards of rank: %d... GoFish!\n",
              otherPlayer, rank);
             goFish(pool);
         }
-
-        updateBooks();
     }
 
 
@@ -89,8 +96,8 @@ abstract class Player extends HBox {
     public void goFish(Pool pool) {
         // Draw a card from the pool
         hand.add(pool.draw());
-        // Update the hand (visually)
-        updateHand();
+        // Check if any "books" were made
+        updateBooks();
     }
 
     /**
@@ -120,12 +127,15 @@ abstract class Player extends HBox {
         }
         
         // Find and remove cards of the same rank if their count is 4 or greater: Increment the count of books
-        for (int rank: rankCount.values())
-            if (rank >= 4) {
+        for (Map.Entry<Integer, Integer> rankMapping: rankCount.entrySet()) {
+            if (rankMapping.getValue() >= 4) {
                 books++;
-                hand.removeIf((card) -> (card.getRank() == rank));
+                booksHeld.setText(String.format("Books held: %d", books));
+                hand.removeIf((card) -> (card.getRank() == rankMapping.getKey()));
             }
-                
+        }
+
+        updateHand();
     }
 
     @Override
