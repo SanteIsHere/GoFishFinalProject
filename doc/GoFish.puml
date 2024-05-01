@@ -1,5 +1,6 @@
 @startuml GoFishGame
 
+' Use standard accessibility icons
 skinparam ClassAttributeIconSize 0
 
 abstract class Player {
@@ -21,19 +22,11 @@ abstract class Player {
     - updateBooks(): void
 }
 
-note left of Player::booksHeld
-    JavaFX text component indicating the no. of books held
-end note
-
-note left of Player::books
-    No. of groups of four cards of the same rank
-end note
-
 class HumanPlayer {
     - controls: VBox
 
     + HumanPlayer(manager: GoFish.GameManager, pool: Pool, opponent: CPUPlayer)
-    -
+    + takeTurn(): void
 }
 
 note right of HumanPlayer
@@ -46,7 +39,8 @@ note right of HumanPlayer
 end note
 
 class CPUPlayer {
-
+    
+    + takeTurn(HumanPlayer player): void
 }
 
 note right of CPUPlayer
@@ -57,14 +51,16 @@ note right of CPUPlayer
 end note
 
 class GoFish {
-    - {static} currentPlayer: Player // Select randomly
     - {static} player: Player
     - {static} cpu: Player
     - {static} cardPool: Pool
+    - {static} stage: Stage
+    - {static} manager: GameManager
 }
 
 class GameManager {
-
+    - {static} initGame(): void
+    + handleCardsExhausted(message: String): void 
 }
 
 note right of GameManager
@@ -82,9 +78,9 @@ class Pool {
     + dealCards()
 }
 
-' note right of Pool
-'     "Represents the deck of available cards"
-' end note
+note right of Pool
+    "Represents the deck of available cards"
+end note
 
 class Card {
     - {static} validSuits: String[] = {"Clubs", "Diamonds", 
@@ -93,10 +89,22 @@ class Card {
     12 -> "Q", 13 -> "K"}
     - rank: int
     - suit: String
+
+    getSymbolicRank(): String
+    getRank(): int
+    getSuit(): String
+    compareTo(otherCard: Card): void
 }
 
-class CardsExhaustedException {
+note right of Card
+    Class that represents each card in a pool or player's hand.
+    Implements the `Comparable` interface so that cards can be compared
+    and sorted in collections. Extends `ImageView` class so that
+    the `Card` can be represented graphically.
+end note
 
+class CardsExhaustedException {
+    CardsExhaustedException(message: String)
 }
 
 note right of CardsExhaustedException
@@ -107,9 +115,10 @@ end note
 HumanPlayer --|> Player: extends
 CPUPlayer --|> Player: extends
 Player --> Pool: uses
+Player o--> Card: part of
 Pool o--> Card: part of
 GoFish *--> Pool: has a
 CardsExhaustedException --> RuntimeException: extends
-GameManager o--> GoFish: composite
+GoFish *--> GameManager: composes
 
 @enduml

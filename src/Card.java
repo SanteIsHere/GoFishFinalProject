@@ -13,9 +13,11 @@ between instances (and sorting)
 @field rank The card's rank (randomly generated integer 1-13) 
 */
 public class Card extends ImageView implements Comparable<Card> {
+    // Shared field - an array containing all valid suits for a card
     private static String[] validSuits =
     {"Clubs", "Diamonds", "Hearts", "Spades"};
    
+    // Map that assigns numeric ranks to their symbolic value
     private static Map<Integer, String> rankMap =
     Map.ofEntries(
         entry(1, "A"),
@@ -23,19 +25,21 @@ public class Card extends ImageView implements Comparable<Card> {
         entry(12, "Q"),
         entry(13, "K")
     );
+
+    // The suit assigned to a `Card` instance
     private String suit;
+
+    // The rank assigned to a `Card` instance (randomly chosen)
     private int rank = (int)(Math.random()*13)+1;
     
     public Card() {
+        // Assign a random suit to the card
         this.suit = validSuits[(int)(Math.random()*4)];
 
-        // Debug: Print path of image to console to validate 
-        // System.out.println(String.format("resources/%s/tile%03d.png", suit, rank));
 
         // Set the image for a (Player's) card
-        setImage(new Image(
-            String.format("resources/%s/tile%03d.png", suit, rank-1)
-            )
+        setImage(
+            new Image(String.format("resources/%s/tile%03d.png", suit, rank-1))
         );
     }
 
