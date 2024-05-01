@@ -11,9 +11,10 @@ import javafx.scene.text.Text;
  * @field deck Deck of cards available to draw from (initially)
  */
 public class Pool extends HBox {
-    private ArrayList<Card> deck = new ArrayList<Card>(52);
+    public ArrayList<Card> deck = new ArrayList<Card>(52);
     private ImageView img = new ImageView();
     private Text count = new Text(String.format("%d cards left", deck.size()));
+    private static GoFish.GameManager manager = new GoFish.GameManager();
 
 
     public Pool() {
@@ -29,7 +30,7 @@ public class Pool extends HBox {
     }
 
     /**
-     * Deal cards to players when the game begins
+     * Deal cards to players when the game begins - This method is only used once.
      * 
      * D2 - The parameters of the method are polymorphic references
      * to objects that inherit/sub-class `Player` - `HumanPlayer`s or `CPUPlayer`s
@@ -46,15 +47,18 @@ public class Pool extends HBox {
     /**
      * Draw from the top of the pool/deck
      */
-    public Card draw() throws PoolExhaustedException {
-        if (deck.isEmpty())
-            throw new PoolExhaustedException("No cards left in the pool...");
-        else {
+    public Card draw() throws CardsExhaustedException {
+        try {
             // Remove the top-most card from the pool
             Card drawnCard = deck.remove(0);
             // Update the count indicator (`Text` component)
             count.setText(String.format("%d cards left", deck.size())); 
             return drawnCard;
         }
+        catch (IndexOutOfBoundsException ex) {
+            manager.handleCardsExhausted("No cards left in the pool...");
+    
+        }
+        return null;
     }
 }

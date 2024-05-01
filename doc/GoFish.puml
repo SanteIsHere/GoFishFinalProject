@@ -3,14 +3,22 @@
 skinparam ClassAttributeIconSize 0
 
 abstract class Player {
-    # hand: ArrayList<Card> // Re-sizable array of cards
+    # hand: ArrayList<Card> 
     - books: int 
     - booksHeld: Text 
+    - statusIndicator: Text
+    - indicators: VBox
+    # {static} pool: Pool
+    # {static} manager: GoFish.GameManager
 
     + goFish(): void
     + drawCards(rank: int): void
-    + hasRank(rank: int): boolean
+    - hasRank(rank: int): boolean
     + updateHand(): void
+    + drawCards(rank: int): Card
+    + requestCards(rank: int, otherPlayer: Player): void
+    # indicateStatus(message: String): void
+    - updateBooks(): void
 }
 
 note left of Player::booksHeld
@@ -22,7 +30,10 @@ note left of Player::books
 end note
 
 class HumanPlayer {
+    - controls: VBox
 
+    + HumanPlayer(manager: GoFish.GameManager, pool: Pool, opponent: CPUPlayer)
+    -
 }
 
 note right of HumanPlayer
@@ -84,14 +95,11 @@ class Card {
     - suit: String
 }
 
-class Card {
-}
-
-class PoolExhaustedException {
+class CardsExhaustedException {
 
 }
 
-note right of PoolExhaustedException
+note right of CardsExhaustedException
     Subclass of `RuntimeException` that indicates
     that a player - or the pool - has run out of cards
 end note
@@ -101,7 +109,7 @@ CPUPlayer --|> Player: extends
 Player --> Pool: uses
 Pool o--> Card: part of
 GoFish *--> Pool: has a
-PoolExhaustedException --> RuntimeException: extends
+CardsExhaustedException --> RuntimeException: extends
 GameManager o--> GoFish: composite
 
 @enduml

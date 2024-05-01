@@ -3,8 +3,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 /**
  * D3 - Abstract class representing a Player
@@ -16,15 +23,35 @@ abstract class Player extends HBox {
      */
     protected List<Card> hand = 
     new ArrayList<Card>();
+    
     // The no. of books the player holds
     private int books = 0;
+    
     /* D9 - Players depend on/use a shared pool of cards */
     protected static Pool pool;
+    
     // Map of each rank to their count in the player's hand
     private HashMap<Integer, Integer> rankCount = 
     new HashMap<Integer, Integer>();
+    
     // Visual indicator for book count
     private Text booksHeld = new Text("Books held: 0");
+    
+    // `Text` node that displays the result of a player's actions
+    private Text statusIndicator = new Text();
+    
+    // Container for indicators
+    private VBox indicators = new VBox(booksHeld, statusIndicator);
+
+    // Manager for the `Player` instance
+    protected static GoFish.GameManager manager = new GoFish.GameManager();
+
+
+    public Player() {
+        booksHeld.setFill(Color.WHITE);
+        statusIndicator.setFill(Color.WHITE);
+        statusIndicator.setWrappingWidth(100);
+    }
 
     /**
      * Updates the contents of the player's hand (visually - adds the card objects to 
@@ -37,8 +64,17 @@ abstract class Player extends HBox {
         getChildren().clear();
         
         // Add the book count indicator and cards in the hand to the `ObservableList`
-        getChildren().add(booksHeld);
-        getChildren().addAll(hand);
+        getChildren().add(indicators);
+        for (Card card: hand) {
+            card.setOpacity(0.0);
+            getChildren().add(card);
+            FadeTransition cardAddAnim = new FadeTransition(Duration.millis(500), card);
+
+            cardAddAnim.setFromValue(0.0);
+            cardAddAnim.setToValue(1.0);
+            
+            cardAddAnim.play();
+        }
     }
 
     /**
@@ -46,19 +82,20 @@ abstract class Player extends HBox {
      * @param rank The rank of cards to search for
      * @return Array of cards with
      */
-    public Card drawCards(int rank) throws PoolExhaustedException {
-        try {
-            if (hand.isEmpty())
-                throw new PoolExhaustedException("Hand is empty"); 
-            else {
-                for (Card card: hand)
-                    if (card.getRank() == rank) {
-                        System.out.printf("Got card! (From '%s') -> %s\n", this, card);
-                        return hand.remove(hand.indexOf(card));
-                    }
+    public Card drawCards(int rank) throws CardsExhaustedException {
+        if (hand.isEmpty())
+            /* D12 - Throw our custom exception class `CardsExhaustedException` when a `Player`
+             * has no more cards to draw from
+             */
+            throw new CardsExhaustedException("Player has no more cards to draw from...");
+        for (Card card: hand) {
+            if (card.getRank() == rank) {
+                /* Print out to the console (and to the `Text` node) that a card
+                 * of the requested rank was acquired
+                 */
+                System.out.printf("Got card! (From '%s') -> %s\n", this, card);
+                return hand.remove(hand.indexOf(card));
             }
-        } catch (PoolExhaustedException ex) {
-            ex.printStackTrace();
         }
         return null;
     }
@@ -81,17 +118,68 @@ abstract class Player extends HBox {
      * @param rank The rank of cards to request
      * @param otherPlayer
      */
-    public void requestCards(int rank, Player otherPlayer) {
+    public void requestCards(int rank, Player otherPlayer) throws NumberFormatException {
+        
         if (otherPlayer.hasRank(rank))
         {
-           while (otherPlayer.hasRank(rank))
+            int initHandSize = hand.size(); 
+            while (otherPlayer.hasRank(rank))
                 hand.add(otherPlayer.drawCards(rank));
+
+            int newHandSize = hand.size()-initHandSize;
+            statusIndicator.setText(
+                String.format("Received %d cards of rank: %d",
+            newHandSize, rank));
+
+            indicateStatus(
+                String.format("Received %d cards of rank: %d",
+                 newHandSize, rank)
+            );
+
+
             updateBooks();
+        } else if (!(rank <= 13 && rank >= 1)) { 
+            throw new NumberFormatException();
         } else {
             System.out.printf("Player (%s) has no cards of rank: %d... GoFish!\n",
              otherPlayer, rank);
+            
+
+            indicateStatus(
+                String.format("Player (%s) has no cards of rank: %d... GoFish!\n",
+                otherPlayer, rank)
+            );
+
             goFish(pool);
         }
+    }
+
+    /**
+     * Reveal the `Text` node indicating the result of a player action 
+     * (Requesting cards, receiving cards, etc)
+     * @param message
+     */
+    protected void indicateStatus(String message) {
+        statusIndicator.setVisible(true);
+        statusIndicator.setText(message);
+            
+        // Create a `PauseTransition` to set a delay before
+        // hiding the `Text` node
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(new EventHandler<ActionEvent>() {
+        
+        /**
+         * Hide the `Text` node and clear its text
+         */
+        @Override
+        public void handle(ActionEvent event) {
+            statusIndicator.setVisible(false);
+            // getChildren().remove(statusIndicator);
+            statusIndicator.setText("");
+            }
+        });
+
+        delay.play();
     }
 
 

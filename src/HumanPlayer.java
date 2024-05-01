@@ -10,7 +10,7 @@ import javafx.util.Duration;
 public class HumanPlayer extends Player {
     private VBox controls = new VBox();
     
-    public HumanPlayer(Pool cardPool, CPUPlayer opponent) {
+    public HumanPlayer(GoFish.GameManager manager, Pool cardPool, CPUPlayer opponent) {
         /* Initialize a `Button` control and `TextField` to allow a `Player`
          * to request cards of a rank
          */
@@ -23,20 +23,31 @@ public class HumanPlayer extends Player {
 
         rankInput.setPromptText("Enter a number: 1-13");
         
+        /* D5 - Define a callback function for the "Ask for cards" button,
+         * using a Lambda Expression implementing the functional interface
+         * `EventHandler<ActionEvent>`
+         */
         requestBttn.setOnAction((ActionEvent ev)
         -> {
-            System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
-            requestCards(Integer.valueOf(rankInput.getText()), opponent);
-            FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
-            revealControls.setFromValue(1.0);
-            revealControls.setToValue(0.0);
-            revealControls.setOnFinished((event) -> {controls.setVisible(false);}
-            );
-            revealControls.play();
-            rankInput.clear(); // Clear the text input field
-            opponent.takeTurn(this);
-            takeTurn();
-            
+            try {
+                System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
+                requestCards(Integer.valueOf(rankInput.getText()), opponent);
+                FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
+                revealControls.setFromValue(1.0);
+                revealControls.setToValue(0.0);
+                revealControls.setOnFinished((event) -> {controls.setVisible(false);}
+                );
+                revealControls.play();
+                rankInput.clear(); // Clear the text input field
+                opponent.takeTurn(this);
+                takeTurn();
+            }
+            catch (CardsExhaustedException ex) {
+                manager.handleCardsExhausted(ex.getMessage());
+            }
+            catch (NumberFormatException ex) {
+                indicateStatus("Invalid rank... Please enter a rank from 1-13");
+            }
         });
         controls.getChildren().addAll(requestBttn, rankInput);
     }
@@ -60,13 +71,15 @@ public class HumanPlayer extends Player {
     public void updateHand() {
         super.updateHand();
         getChildren().add(0, controls);
-        for (Node node: getChildren())
+        for (Node node: getChildren()) {
             if (node instanceof Card) {
                 Card card = (Card)node;
                 card.setImage(new Image(
                     String.format("resources/%s/tile%03d.png", 
                     card.getSuit(), card.getRank()-1)
-                    ));
+                ));
+
+            }
         }
     }
 }

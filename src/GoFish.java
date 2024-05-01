@@ -21,12 +21,10 @@ import javafx.stage.Stage;
 public class GoFish extends Application {
     
     private static Stage stage = new Stage();
-    private static CPUPlayer cpu = new CPUPlayer();
-    /* The `GoFish` class composes the `Pool`
-     * class as a `Pool` 
-     */
     private static Pool cardPool = new Pool();
-    private static HumanPlayer player = new HumanPlayer(cardPool,
+    private static GameManager manager = new GameManager();
+    private static CPUPlayer cpu = new CPUPlayer(manager);
+    private static HumanPlayer player = new HumanPlayer(manager, cardPool,
      cpu);
 
     @Override
@@ -35,6 +33,7 @@ public class GoFish extends Application {
 
         stage.setTitle("Go Fish!");
 
+        /* Display the splash/start screen at application start */
         stage.setScene(startScreen());
 
         stage.show();
@@ -57,7 +56,7 @@ public class GoFish extends Application {
         startGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
-                GameManager.initializeGame();
+                GameManager.initGame();
             }
         });
         VBox root = new VBox(title, startGame);
@@ -98,20 +97,32 @@ public class GoFish extends Application {
         return new Scene(display);
     }
 
-    /**
-    D7 - Inner Class managing game state 
-    */
-    private static class GameManager {
-        static boolean gameOver = false;
+    /* D7 - Inner Class managing game state 
 
-
-        private static void initializeGame() {
+     * D8 - The `GoFish` class "composes" or 
+     * strongly aggregates the inner `GameManager`
+     * class as their lifetimes are strongly tied
+     */
+    protected static class GameManager {         
+        private static void initGame() {
             cardPool.dealCards(player, cpu);
             stage.setScene(startGameScene());
             stage.sizeToScene();
             stage.show();
         }
-    }
+
+        /**
+         * D13 - This method handles the `CardsExhaustedException`
+         * by printing the message associated with the exception
+         * to the SysErr stream and displaying the `Game Over` screen
+         * indicating which player won
+         * @param message
+         */
+        public void handleCardsExhausted(String message) {
+            stage.setScene(gameOverScreen());
+            System.err.println(message);
+        }
+    } 
 
     
 
