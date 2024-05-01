@@ -1,5 +1,3 @@
-import java.util.concurrent.TimeUnit;
-
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -27,20 +25,17 @@ public class HumanPlayer extends Player {
         
         requestBttn.setOnAction((ActionEvent ev)
         -> {
-            if (!takenTurn) {
-                System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
-                requestCards(Integer.valueOf(rankInput.getText()), opponent);
-                takenTurn = true;
-                FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
-                revealControls.setFromValue(1.0);
-                revealControls.setToValue(0.0);
-                revealControls.setOnFinished((event) -> {controls.setVisible(false);}
-                );
-                revealControls.play();
-                rankInput.clear(); // Clear the text input field
-                opponent.takeTurn(this);
-                takeTurn();
-            }
+            System.out.println("Requesting cards of rank " + Integer.valueOf(rankInput.getText()));
+            requestCards(Integer.valueOf(rankInput.getText()), opponent);
+            FadeTransition revealControls = new FadeTransition(Duration.millis(350), controls);
+            revealControls.setFromValue(1.0);
+            revealControls.setToValue(0.0);
+            revealControls.setOnFinished((event) -> {controls.setVisible(false);}
+            );
+            revealControls.play();
+            rankInput.clear(); // Clear the text input field
+            opponent.takeTurn(this);
+            takeTurn();
             
         });
         controls.getChildren().addAll(requestBttn, rankInput);
@@ -53,10 +48,12 @@ public class HumanPlayer extends Player {
         revealControls.setOnFinished((event) -> {controls.setVisible(true);}
         );
         revealControls.play();
-        takenTurn = false;
     }
 
     /**
+     * D4 - Override the non-`abstract` method `updateHand()`
+     * to extend its functionality for human players
+     * 
      * Change cards to be visible (for a Human Player)
      */
     @Override
@@ -70,7 +67,6 @@ public class HumanPlayer extends Player {
                     String.format("resources/%s/tile%03d.png", 
                     card.getSuit(), card.getRank()-1)
                     ));
-            }
-                
+        }
     }
 }

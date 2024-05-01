@@ -1,32 +1,74 @@
 @startuml GoFishGame
 
-' note top of Game
-'     "Go Fish simulation for two players"
-' end note
+skinparam ClassAttributeIconSize 0
 
 abstract class Player {
-    - cards: ArrayList<Card> // Re-sizable array of cards
-    - books: int // No. of groups of four cards of the same rank
-    - score: int // Player's score - determined by the no. of books they have
+    # hand: ArrayList<Card> // Re-sizable array of cards
+    - books: int 
+    - booksHeld: Text 
+
+    + goFish(): void
+    + drawCards(rank: int): void
+    + hasRank(rank: int): boolean
+    + updateHand(): void
 }
+
+note left of Player::booksHeld
+    JavaFX text component indicating the no. of books held
+end note
+
+note left of Player::books
+    No. of groups of four cards of the same rank
+end note
 
 class HumanPlayer {
 
 }
 
+note right of HumanPlayer
+    Class that represents a Human player.
+    Human players can pass input to the 
+    game via their controls.
+
+    The cards in the hand of a Human player
+    are visible to the user.
+end note
+
 class CPUPlayer {
 
 }
 
-class GoFishGame {
+note right of CPUPlayer
+    Class that represents a Computer player.
+    Non-controllable and autonomous, randomly
+    selects a rank of cards to request from
+    the player. 
+end note
+
+class GoFish {
     - {static} currentPlayer: Player // Select randomly
     - {static} player: Player
     - {static} cpu: Player
     - {static} cardPool: Pool
 }
 
+class GameManager {
+
+}
+
+note right of GameManager
+    Static Inner class of class GoFish
+    that manages the state of the game:
+    Players, turn, score, etcetera.    
+end note
+
 class Pool {
-    - deck: Card[]
+    - deck: ArrayList<Card>
+    - img: ImageView
+    - count: Text
+
+    + draw(): Card
+    + dealCards()
 }
 
 ' note right of Pool
@@ -57,9 +99,9 @@ end note
 HumanPlayer --|> Player: extends
 CPUPlayer --|> Player: extends
 Player --> Pool: uses
-Pool o-up-> Card: part of
-GoFishGame *--> Pool: has a
-Pool -up-> Drawable: implements
-PoolExhaustedException -up-> RuntimeException: extends
+Pool o--> Card: part of
+GoFish *--> Pool: has a
+PoolExhaustedException --> RuntimeException: extends
+GameManager o--> GoFish: composite
 
 @enduml

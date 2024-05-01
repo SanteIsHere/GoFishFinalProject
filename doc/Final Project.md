@@ -21,11 +21,11 @@ concepts together.
 
 ## Design Requirements
 
-- [ ] D1 - The project shall demonstrate Polymorphic references using interfaces in their most logical and appropriate uses
-- [ ] D2 - The project shall demonstrate Polymorphic references using subclassing in their most logical and appropriate uses
+- [x] D1 - The project shall demonstrate Polymorphic references using interfaces in their most logical and appropriate uses
+- [x] D2 - The project shall demonstrate Polymorphic references using subclassing in their most logical and appropriate uses
 - [x] D3 - The project shall demonstrate the use of at least one abstract class
-- [ ] D4 - The project shall demonstrate the use of sub-classing where a method (non-`{java}abstract`) is overridden requiring use the `{java}super` keyword
-- [ ] D5 - The project shall demonstrate the use of a callback using an functional interface and a Lambda expression
+- [x] D4 - The project shall demonstrate the use of sub-classing where a method (non-`{java}abstract`) is overridden requiring use the `{java}super` keyword
+- [x] D5 - The project shall demonstrate the use of a callback using an functional interface and a Lambda expression
 - [x] D6 - The project shall demonstrate the use of a callback using an instance of an anonymous class
 - [x] D7 - The project shall demonstrate the use of an Inner Class
   - This is a help to be able to make your GUI have easily shared data with objects...
@@ -38,12 +38,12 @@ concepts together.
 
 ## Functional Requirements
 
-- [ ] F1 - The project shall demonstrate the use of at least one Graphical User Interface component that accepts input from the user and triggers a reaction described in \[F2\]
+- [x] F1 - The project shall demonstrate the use of at least one Graphical User Interface component that accepts input from the user and triggers a reaction described in \[F2\]
   - Inputs may include mouse clicking on certain component, typing in text data, selecting checkboxes, selecting radio buttons, or other inputs
-- [ ] F2 - The project shall demonstrate adding or removing GUI components based on user entry
-- [ ] F3 - The project shall demonstrate the use of at least one Graphical User Interface component (different than \[F1\]) that accepts input from the user and triggers a reaction described in \[F4\]
+- [x] F2 - The project shall demonstrate adding or removing GUI components based on user entry
+- [x] F3 - The project shall demonstrate the use of at least one Graphical User Interface component (different than \[F1\]) that accepts input from the user and triggers a reaction described in \[F4\]
   - Inputs may include mouse clicking on certain component, typing in text data, selecting checkboxes, selecting radio buttons, or other inputs
-- [ ] F4 - The project shall demonstrate changing the properties of a visual element based on the user entry.
+- [x] F4 - The project shall demonstrate changing the properties of a visual element based on the user entry.
 
 ## Bonus Requirements
 

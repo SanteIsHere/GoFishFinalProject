@@ -6,17 +6,23 @@ import java.util.Map;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+/**
+ * D3 - Abstract class representing a Player
+ */
 abstract class Player extends HBox {
-    // Player's hand of cards
+    /* D1 - Player's hand of cards,
+     * a polymorphic reference of interface
+     * type `List` to an `ArrayList` of `Card`s
+     */
     protected List<Card> hand = 
     new ArrayList<Card>();
     // The no. of books the player holds
     private int books = 0;
+    /* D9 - Players depend on/use a shared pool of cards */
     protected static Pool pool;
     // Map of each rank to their count in the player's hand
     private HashMap<Integer, Integer> rankCount = 
     new HashMap<Integer, Integer>();
-    public boolean takenTurn = false;
     // Visual indicator for book count
     private Text booksHeld = new Text("Books held: 0");
 

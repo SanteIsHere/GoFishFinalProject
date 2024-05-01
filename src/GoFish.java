@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -21,7 +22,7 @@ public class GoFish extends Application {
     
     private static Stage stage = new Stage();
     private static CPUPlayer cpu = new CPUPlayer();
-    /* D6 - The `GoFish` class composes the `Pool`
+    /* The `GoFish` class composes the `Pool`
      * class as a `Pool` 
      */
     private static Pool cardPool = new Pool();
@@ -74,8 +75,6 @@ public class GoFish extends Application {
         // Give the game board a green background color
         gameSpace.setStyle("-fx-background-color: green;");
 
-
-
         HBox interactableSpace = new HBox(cardPool);
 
         gameSpace.setTop(cpu);
@@ -91,24 +90,26 @@ public class GoFish extends Application {
 
     }
 
-    // Inner Class managing game state
+    private static Scene gameOverScreen() {
+        BorderPane display = new BorderPane();
+
+        display.setCenter(new Text("Game Over!"));
+
+        return new Scene(display);
+    }
+
+    /**
+    D7 - Inner Class managing game state 
+    */
     private static class GameManager {
         static boolean gameOver = false;
 
 
         private static void initializeGame() {
             cardPool.dealCards(player, cpu);
-            // System.out.println(cpu.getHand());
             stage.setScene(startGameScene());
             stage.sizeToScene();
             stage.show();
-
-
-            if (!player.takenTurn) {
-                player.takeTurn();
-            }        
-            else
-                cpu.takeTurn(player);
         }
     }
 
