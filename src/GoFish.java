@@ -89,10 +89,14 @@ public class GoFish extends Application {
 
     }
 
-    private static Scene gameOverScreen() {
+    private static Scene gameOverScreen(String message) {
         BorderPane display = new BorderPane();
 
-        display.setCenter(new Text("Game Over!"));
+        Text gameOverText = new Text(
+            String.format("Game Over! %s", message)
+        );
+
+        display.setCenter(gameOverText);
 
         return new Scene(display);
     }
@@ -119,8 +123,18 @@ public class GoFish extends Application {
          * @param message
          */
         public void handleCardsExhausted(String message) {
-            stage.setScene(gameOverScreen());
+            
+            stage.setScene(gameOverScreen(determineWinner()));
             System.err.println(message);
+        }
+
+        public String determineWinner() {
+            if (player.hand.size() > cpu.hand.size())
+                return "You won!";
+            else if (player.hand.size() == cpu.hand.size())
+                return "Tie game!";
+            else
+                return "CPU won...";
         }
     } 
 
