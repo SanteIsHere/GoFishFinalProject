@@ -13,6 +13,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/* Name: GoFish
+ * Author: Asante Frye
+ * Description: Simulation of a "GoFish" card game using the JavaFX 
+ * framework for graphics 
+ */
+
 /**
  * GoFish
  * D10 - Simulation of a "Go Fish" game

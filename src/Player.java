@@ -44,9 +44,6 @@ abstract class Player extends HBox {
     // Container for indicators
     private VBox indicators = new VBox(booksHeld, statusIndicator);
 
-    // Container for cards
-    private FlowPane cardCont = new FlowPane();
-
     // Manager for the `Player` instance
     protected static GoFish.GameManager manager = new GoFish.GameManager();
 
