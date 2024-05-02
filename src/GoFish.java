@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -93,8 +92,10 @@ public class GoFish extends Application {
         BorderPane display = new BorderPane();
 
         Text gameOverText = new Text(
-            String.format("Game Over! %s", message)
+            String.format("Game Over!\n%s", message)
         );
+
+        gameOverText.setFont(Font.font(null, FontWeight.BOLD, 50));
 
         display.setCenter(gameOverText);
 

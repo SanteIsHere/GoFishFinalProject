@@ -7,6 +7,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -43,14 +44,20 @@ abstract class Player extends HBox {
     // Container for indicators
     private VBox indicators = new VBox(booksHeld, statusIndicator);
 
+    // Container for cards
+    private FlowPane cardCont = new FlowPane();
+
     // Manager for the `Player` instance
     protected static GoFish.GameManager manager = new GoFish.GameManager();
+
+
 
 
     public Player() {
         booksHeld.setFill(Color.WHITE);
         statusIndicator.setFill(Color.WHITE);
-        statusIndicator.setWrappingWidth(100);
+        statusIndicator.setWrappingWidth(100.0);
+        indicators.setSpacing(30.0);
     }
 
     /**

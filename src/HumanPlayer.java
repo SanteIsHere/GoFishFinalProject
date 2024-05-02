@@ -42,7 +42,7 @@ public class HumanPlayer extends Player {
                 opponent.takeTurn(this);
                 takeTurn();
             }
-            catch (CardsExhaustedException ex) {
+            catch (CardsExhaustedException|NullPointerException ex) {
                 manager.handleCardsExhausted(ex.getMessage());
             }
             catch (NumberFormatException ex) {

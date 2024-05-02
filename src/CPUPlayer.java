@@ -1,10 +1,4 @@
-import GoFish.GameManager;
-import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class CPUPlayer extends Player {
     
