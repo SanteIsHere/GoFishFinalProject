@@ -136,9 +136,9 @@ public class GoFish extends Application {
         }
 
         public String determineWinner() {
-            if (player.hand.size() > cpu.hand.size())
+            if (player.hand.getSize() > cpu.hand.getSize())
                 return "You won!";
-            else if (player.hand.size() == cpu.hand.size())
+            else if (player.hand.getSize() == cpu.hand.getSize())
                 return "Tie game!";
             else
                 return "CPU won...";

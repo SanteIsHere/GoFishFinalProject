@@ -1,17 +1,9 @@
-import javafx.scene.image.Image;
+
 
 public class CPUPlayer extends Player {
     
 
     public CPUPlayer(GoFish.GameManager manager) {
-    }
-
-    @Override
-    public void updateHand() {
-        super.updateHand();
-        for (Card card: hand) {
-            card.setImage(new Image("resources/CardBackBlue.png"));
-        }
     }
 
     @Override

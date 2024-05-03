@@ -1,9 +1,7 @@
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -50,6 +48,7 @@ public class HumanPlayer extends Player {
             }
         });
         controls.getChildren().addAll(requestBttn, rankInput);
+        getChildren().add(controls);
     }
 
     public void takeTurn() {
@@ -59,27 +58,5 @@ public class HumanPlayer extends Player {
         revealControls.setOnFinished((event) -> {controls.setVisible(true);}
         );
         revealControls.play();
-    }
-
-    /**
-     * D4 - Override the non-`abstract` method `updateHand()`
-     * to extend its functionality for human players
-     * 
-     * Change cards to be visible (for a Human Player)
-     */
-    @Override
-    public void updateHand() {
-        super.updateHand();
-        getChildren().add(0, controls);
-        for (Node node: getChildren()) {
-            if (node instanceof Card) {
-                Card card = (Card)node;
-                card.setImage(new Image(
-                    String.format("resources/%s/tile%03d.png", 
-                    card.getSuit(), card.getRank()-1)
-                ));
-
-            }
-        }
     }
 }
