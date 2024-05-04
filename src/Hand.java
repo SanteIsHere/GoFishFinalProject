@@ -1,5 +1,7 @@
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.util.Duration;
@@ -13,7 +15,12 @@ public class Hand extends FlowPane {
     private Player owner;
 
     public Hand(Player owner) {
+        // Set the owner for the hand (`Player` instance)
         this.owner = owner;
+        // Add margins around the hand
+        setPadding(new Insets(35.0));
+        setOrientation(Orientation.HORIZONTAL);
+        setPrefWrapLength(500.0);
     }
 
     /** Add a card to the Hand, and animate it
@@ -58,11 +65,20 @@ public class Hand extends FlowPane {
         return removedCard;
     }
 
+
     public int getSize() {
         return getChildren().size();
     }
 
-
+    /**
+     * Updates the image assoicated with each card in the 
+     * hand.
+     * 
+     * For a `HumanPlayer`, an image representing the cards
+     * suit and rank is made visible
+     * 
+     * For a `CPUPlayer`, a generic rear image of the card is set
+     */
     private void update() {
         if (owner instanceof HumanPlayer) {
             getChildren().forEach((card) -> {

@@ -19,7 +19,7 @@ abstract class Player extends HBox {
     protected Hand hand = new Hand(this);
     
     // The no. of books the player holds
-    private int books = 0;
+    public int books = 0;
     
     /* D9 - Players depend on/use a shared pool of cards */
     protected static Pool pool;
@@ -45,7 +45,9 @@ abstract class Player extends HBox {
         statusIndicator.setFill(Color.WHITE);
         statusIndicator.setWrappingWidth(100.0);
         indicators.setSpacing(30.0);
+        getChildren().add(indicators);
         getChildren().add(hand);
+
     }
 
     /**
@@ -185,8 +187,6 @@ abstract class Player extends HBox {
                 hand.getChildren().removeIf((card) -> (((Card)card).getRank() == rankMapping.getKey()));
             }
         }
-
-        // updateHand();
     }
 
     @Override

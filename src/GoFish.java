@@ -31,17 +31,19 @@ public class GoFish extends Application {
     private static CPUPlayer cpu = new CPUPlayer(manager);
     private static HumanPlayer player = new HumanPlayer(manager, cardPool,
      cpu);
+    private static Scene currScene;
 
     @Override
-    public void start(Stage stage) {
-        stage = GoFish.stage;
+    public void start(Stage primaryStage) {
+        primaryStage = GoFish.stage;
 
-        stage.setTitle("Go Fish!");
+        primaryStage.setTitle("Go Fish!");
 
         /* Display the splash/start screen at application start */
-        stage.setScene(startScreen());
+        currScene = startScreen();
+        primaryStage.setScene(currScene);
 
-        stage.show();
+        primaryStage.show();
     }
 
     /**
@@ -75,20 +77,54 @@ public class GoFish extends Application {
      */
     private static Scene startGameScene() {
         BorderPane gameSpace = new BorderPane();
-
+        
         // Give the game board a green background color
         gameSpace.setStyle("-fx-background-color: green;");
 
-        HBox interactableSpace = new HBox(cardPool);
+        HBox poolDisplay = new HBox(cardPool);
 
         gameSpace.setTop(cpu);
         BorderPane.setMargin(cpu, new Insets(20, 0, 0, 0));
-        gameSpace.setCenter(interactableSpace);
-        BorderPane.setMargin(interactableSpace, new Insets(50, 0, 50, 250));
+        gameSpace.setCenter(poolDisplay);
+        BorderPane.setMargin(poolDisplay, new Insets(50, 0, 50, 250));
         gameSpace.setBottom(player);
         BorderPane.setMargin(player, new Insets(0, 0, 20, 0));
         
         Pane root = new Pane(gameSpace);
+
+        // gameSpace.setMinWidth(stage.getWidth());
+        // gameSpace.setMinHeight(stage.getHeight());
+
+        // stage.widthProperty().addListener((ev)
+        // -> {gameSpace.setMinWidth(stage.getMinWidth());});
+
+        // stage.heightProperty().addListener((ev)
+        // -> {gameSpace.setMinHeight(stage.getMinHeight());});
+
+        /* Add a listener that detects when the dimensions
+         * of the scene have changed and resizes the stage
+         * to fit the scene
+         */
+
+        gameSpace.setMinWidth(1280);
+        gameSpace.setMinHeight(720);
+
+        gameSpace.setMaxWidth(1920);
+        gameSpace.setMaxHeight(1080);
+
+        stage.setResizable(false);
+
+        /* Set listeners on the width and height properties of
+         * the root node so that the stage resizes in accordance
+         * to the scene when the root node resizes
+         */
+        gameSpace.widthProperty().addListener(
+            (ev) -> {stage.sizeToScene();}
+        );
+        gameSpace.heightProperty().addListener(
+            (ev) -> {stage.sizeToScene();}
+        );
+
 
         return new Scene(root);
 
@@ -132,13 +168,18 @@ public class GoFish extends Application {
         public void handleCardsExhausted(String message) {
             
             stage.setScene(gameOverScreen(determineWinner()));
-            System.err.println(message);
+            System.out.println(message);
         }
 
+        /**
+         * Determine the winner of the game and return
+         * a String indicating who won
+         * @return
+         */
         public String determineWinner() {
-            if (player.hand.getSize() > cpu.hand.getSize())
+            if (player.books > cpu.books)
                 return "You won!";
-            else if (player.hand.getSize() == cpu.hand.getSize())
+            else if (player.books == cpu.books)
                 return "Tie game!";
             else
                 return "CPU won...";
